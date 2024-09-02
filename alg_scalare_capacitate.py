@@ -2,6 +2,7 @@ import numpy as np
 import generic_dmf_algorithm 
 
 class CapacityScalingAlgorithm(generic_dmf_algorithm.GenericDMFAlgorithm):
+    """Alg de scalare de excess O(sqr(n)*logC+n*m)"""
     def __init__(self, num_nodes, source, sink, flow_matrix, capacity_matrix):
         super().__init__(num_nodes, source, sink)
         self.residual_network = self.calculate_initial_residual_network(self.num_nodes, flow_matrix, capacity_matrix)

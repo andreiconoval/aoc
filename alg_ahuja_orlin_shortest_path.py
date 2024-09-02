@@ -3,6 +3,7 @@ from collections import deque
 import generic_dmf_algorithm
 
 class AhujaOrlinShortestPathAlgorithm(generic_dmf_algorithm.GenericDMFAlgorithm):
+    """Alg Ahuja-Orlin etichete de distanta O(n*sqr(m))"""
     def __init__(self, num_nodes, source, sink):
         super().__init__(num_nodes, source, sink)
         self.exact_distance_labels = [-1] * num_nodes

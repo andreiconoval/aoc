@@ -3,6 +3,7 @@ import random
 import alg_ahuja_orlin_shortest_path
 
 class GenericPreflowAlgorithm(alg_ahuja_orlin_shortest_path.AhujaOrlinShortestPathAlgorithm):
+    """Alg generic de prefluxuri O(sqr(n)*m)"""
     def __init__(self, num_nodes, source, sink):
         super().__init__(num_nodes, source, sink)
         self.node_excesses = []

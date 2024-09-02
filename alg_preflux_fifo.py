@@ -3,6 +3,7 @@ import numpy as np
 import alg_generic_cu_preflux
 
 class PreflowFIFOAlgorithm(alg_generic_cu_preflux.GenericPreflowAlgorithm):
+    """Alg cu preflux FIFO O(n*n*n)"""
     def __init__(self, num_nodes, source, sink):
         super().__init__(num_nodes, source, sink)
         self.active_nodes_queue = deque()

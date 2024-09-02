@@ -10,6 +10,7 @@ class DistanceComparator:
         return -self.distances[node]  # Max heap, so negate the distance
 
 class PreflowWithHighestLabelAlgorithm(alg_generic_cu_preflux.GenericPreflowAlgorithm):
+    """Alg preflux cu eticheta cea mai mare O(n*sqrt(m))"""
     def __init__(self, num_nodes, source, sink):
         super().__init__(num_nodes, source, sink)
         self.active_nodes_heap = []

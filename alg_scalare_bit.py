@@ -3,6 +3,7 @@ from copy import deepcopy
 import generic_dmf_algorithm 
 
 class BitScalingAlgorithm(generic_dmf_algorithm.GenericDMFAlgorithm):
+    """Alg Gabow de scalare pe biti O(sqr(2)*logC)"""
     def __init__(self, num_nodes, source, sink, capacity_matrix):
         super().__init__(num_nodes, source, sink)
         self.max_capacity_list = []

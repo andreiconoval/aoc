@@ -1,7 +1,7 @@
 import random
 
 class GenericDMFAlgorithm:
-    
+    """Algoritm generic DMF O(m*n*c)"""
     def __init__(self, num_nodes, source, sink):
         self.source_node = source - 1
         self.sink_node = sink - 1

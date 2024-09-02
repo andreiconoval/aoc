@@ -2,6 +2,7 @@ import random
 import generic_dmf_algorithm 
 
 class FordFulkersonAlgorithm(generic_dmf_algorithm.GenericDMFAlgorithm):
+    """Alg DMF cu etichetare Ford Fulkerson O(n*sqr(m))"""
     def __init__(self, num_nodes, source, sink):
         super().__init__(num_nodes, source, sink)
 

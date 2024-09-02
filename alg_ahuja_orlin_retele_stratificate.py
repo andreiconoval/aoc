@@ -3,6 +3,7 @@ from collections import deque
 import alg_ahuja_orlin_shortest_path
 
 class AhujaOrlinLayeredNetworksAlgorithm(alg_ahuja_orlin_shortest_path.AhujaOrlinShortestPathAlgorithm):
+    """Alg Ahuja-Orlin retele stratificate O(n*sqr(m))"""
     def __init__(self, num_nodes, source, sink):
         super().__init__(num_nodes, source, sink)
         self.layered_network_flags = [0] * num_nodes

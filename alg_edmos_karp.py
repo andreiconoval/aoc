@@ -2,6 +2,7 @@ from collections import deque
 import generic_dmf_algorithm
 
 class EdmondsKarpAlgorithm(generic_dmf_algorithm.GenericDMFAlgorithm):
+    """Alg DMF cu etichetare Edmos-Karp, se scoate cel mai vechi nod din cele etichetate"""
     def __init__(self, num_nodes, source, sink):
         super().__init__(num_nodes, source, sink)
 
