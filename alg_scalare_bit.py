@@ -17,19 +17,21 @@ class BitScalingAlgorithm(generic_dmf_algorithm.GenericFlowAlgorithm):
         self.max_capacity.append(max_capacity)
 
     def initialize_capacity_matrices(self, capacity_matrix):
-        # Initialize the capacity matrices by halving the capacities at each step
-        print(f"Maximum capacity: {self.max_capacity[-1]} for step k={self.current_step}")
-        old_capacity_matrix = deepcopy(capacity_matrix)
+        print(f"Maximum capacity: {self.max_capacity} for step k={self.current_step}")
+        old_capacity_matrix = capacity_matrix  # Assume this is a list of lists
 
         while self.max_capacity[-1] > 1:
-            new_capacity_matrix = old_capacity_matrix // 2
+            new_capacity_matrix = [
+                [old_capacity_matrix[i][j] // 2 for j in range(self.node_count)]
+                for i in range(self.node_count)
+            ]
             self.current_step += 1
             print(f"For k={self.current_step}, new capacity matrix:\n{new_capacity_matrix}")
             self.capacity_matrix_stack.append(new_capacity_matrix)
 
             self.calculate_max_capacity(new_capacity_matrix)
             print(f"Maximum capacity: {self.max_capacity[-1]} for step k={self.current_step}")
-            old_capacity_matrix = deepcopy(new_capacity_matrix)
+            old_capacity_matrix = new_capacity_matrix
 
     def run_bit_scaling_algorithm(self, initial_capacity_matrix):
         # Calculate the initial maximum capacity and initialize the capacity matrices

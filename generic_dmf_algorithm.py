@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 class GenericFlowAlgorithm:
     
@@ -81,14 +82,13 @@ class GenericFlowAlgorithm:
         while path_found:
             print(f"Predecessors: {self.predecessors}")
             residual_network = self.update_residual_network(residual_network)
-            
-            for row in residual_network:
-                print(' '.join(map(str, row)))
-                
+            for i in range(self.node_count):
+                print(' '.join(map(str, residual_network[i])))
             path_found = self.find_augmenting_path(residual_network)
         
         print(f"Residual Capacities: {self.residual_capacities}")
         return residual_network
+    
 
     def calculate_max_flow(self, flows, capacities, residual_network):
         max_flow = [row[:] for row in flows]

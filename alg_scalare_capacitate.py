@@ -40,8 +40,7 @@ class CapacityScalingAlgorithm(generic_dmf_algorithm.GenericFlowAlgorithm):
     def calculate_residual_network_corresponding_to_max_flow(self):
         # Iteratively calculate the residual network corresponding to the maximum flow
         while self.r_bar >= 1:
-            r_bar_residual_network = self.calculate_r_bar_residual_network(self.residual_network)
-            r_bar_residual_network = self.calculate_max_flow_residual_network(r_bar_residual_network)
+            r_bar_residual_network = self.calculate_max_flow_residual_network(self.calculate_r_bar_residual_network(self.residual_network))
             print("r_bar residual network:")
             print(r_bar_residual_network)
             self.update_residual_network(r_bar_residual_network)

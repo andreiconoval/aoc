@@ -52,13 +52,13 @@ n = 6
 
 # import alg_scalare_capacitate
 
-# alg_scap = alg_scalare_capacitate.AlgScalareCapacitate(n,s,t,f,c)
-# alg_scap.call_alg_scalare_capacitate(f,c)
+# alg_scap = alg_scalare_capacitate.CapacityScalingAlgorithm(n,s,t,f,c)
+# alg_scap.run_capacity_scaling_algorithm(f,c)
 
-# import alg_scalare_bit
+import alg_scalare_bit
 
-# alg_sbit = alg_scalare_bit.AlgScalareBit(n,s,t,c1)
-# alg_sbit.calculare_alg_scalare_bit(c1)
+alg_sbit = alg_scalare_bit.BitScalingAlgorithm(n,s,t,c1)
+alg_sbit.run_bit_scaling_algorithm(c1)
 
 
 # import alg_ahuja_orlin_shortest_path
@@ -84,7 +84,7 @@ n = 6
 # alg_pref_fifo = alg_preflux_fifo.AlgPrefluxFIFO(5, 1, 5)
 # alg_pref_fifo.calculare_alg_preflux_FIFO(c_PrefFIFO)
 
-import alg_pref_cu_eticheta_maxima
+# import alg_pref_cu_eticheta_maxima
 
-alg_pref_max_label = alg_pref_cu_eticheta_maxima.AlgPrefluxCuEtichetaMaxima(5,1,5)
-alg_pref_max_label.calculare_alg_preflux_cu_eticheta_maxima(c_PrefEMax)
+# alg_pref_max_label = alg_pref_cu_eticheta_maxima.AlgPrefluxCuEtichetaMaxima(5,1,5)
+# alg_pref_max_label.calculare_alg_preflux_cu_eticheta_maxima(c_PrefEMax)
