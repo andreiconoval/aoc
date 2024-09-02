@@ -2,79 +2,77 @@ import numpy as np
 from collections import deque
 import generic_dmf_algorithm
 
-class ShortestPathAlgorithm(generic_dmf_algorithm.GenericFlowAlgorithm):
-    def __init__(self, node_count, source, sink):
-        # Initialize the algorithm with the number of nodes, source, and sink
-        super().__init__(node_count, source, sink)
-        self.exact_distance_labels = [-1] * node_count
-        self.exact_distance_labels[sink] = 0  # Distance from sink to itself is 0
+class AhujaOrlinShortestPathAlgorithm(generic_dmf_algorithm.GenericDMFAlgorithm):
+    def __init__(self, num_nodes, source, sink):
+        super().__init__(num_nodes, source, sink)
+        self.exact_distance_labels = [-1] * num_nodes
+        self.exact_distance_labels[-1] = 0
 
     def calculate_exact_distances_BFS(self, capacity_matrix):
-        # Use BFS to calculate the exact distance labels for each node from the sink
-        visited = [False] * self.node_count
-        queue = deque([self.sink])
-        visited[self.sink] = True
+        visited = [False] * self.num_nodes
+        queue = deque([self.sink_node])
+        visited[self.sink_node] = True
 
-        self.exact_distance_labels[self.source] = self.node_count + 1
+        current_node = self.sink_node
+        self.exact_distance_labels[0] = self.num_nodes + 1
 
-        while not visited[self.source] and queue:
-            current_node = queue.popleft()
-
-            for neighbor in range(self.node_count - 2, -1, -1):
-                if not visited[neighbor] and capacity_matrix[neighbor][current_node] > 0:
-                    visited[neighbor] = True
-                    queue.append(neighbor)
-                    self.exact_distance_labels[neighbor] = self.exact_distance_labels[current_node] + 1
+        while not visited[self.source_node] and queue:
+            for i in range(self.num_nodes - 2, -1, -1):
+                if not visited[i] and capacity_matrix[i][current_node] > 0:
+                    visited[i] = True
+                    queue.append(i)
+                    self.exact_distance_labels[i] = self.exact_distance_labels[current_node] + 1
+            queue.popleft()
+            if queue:
+                current_node = queue[0]
 
         print(self.exact_distance_labels)
 
-    def update_distance_label_by_min_neighbor(self, residual_network, node):
-        # Update the distance label for a node based on its minimum neighbor's distance label
-        min_distance = self.node_count + 1
-        for neighbor in range(self.node_count):
-            if residual_network[node][neighbor] > 0 and self.exact_distance_labels[neighbor] + 1 < min_distance:
-                min_distance = self.exact_distance_labels[neighbor] + 1
+    def calculate_dx_by_min_dy(self, residual_network, x):
+        min_val = self.num_nodes + 1
+        for i in range(self.num_nodes):
+            if residual_network[x][i] > 0 and self.exact_distance_labels[i] + 1 < min_val:
+                min_val = self.exact_distance_labels[i] + 1
 
-        self.exact_distance_labels[node] = min_distance
+        self.exact_distance_labels[x] = min_val
 
-    def find_shortest_path_in_residual_network(self, residual_network, capacity_matrix):
-        # Find the shortest path in the residual network and update the residual capacities
-        current_node = self.source
-        while self.exact_distance_labels[self.source] < self.node_count:
-            for neighbor in range(self.node_count):
-                if (residual_network[current_node][neighbor] > 0 and 
-                    self.exact_distance_labels[current_node] == self.exact_distance_labels[neighbor] + 1):
-                    self.predecessors[neighbor] = current_node
-                    current_node = neighbor
-
-                    if current_node == self.sink:
+    def calculate_shortest_path_on_residual_network(self, residual_network, capacity_matrix):
+        x = self.source_node
+        while self.exact_distance_labels[self.source_node] < self.num_nodes:
+            y = 0
+            while y < self.num_nodes:
+                if (residual_network[x][y] > 0 and
+                    self.exact_distance_labels[x] == self.exact_distance_labels[y] + 1):
+                    self.predecessor_nodes[y] = x
+                    x = y
+                    if x == self.sink_node:
                         residual_network = self.update_residual_network(residual_network)
-                        self.display_network(residual_network)
-                        current_node = self.source
-                        self.predecessors = [-1] * self.node_count
-                    break
-            else:
-                self.update_distance_label_by_min_neighbor(residual_network, current_node)
+
+                        for i in range(self.num_nodes):
+                            print(residual_network[i])
+
+                        x = self.source_node
+                        self.predecessor_nodes = [-1] * self.num_nodes
+                    y = -1
+                y += 1
+            if y == self.num_nodes:
+                self.calculate_dx_by_min_dy(residual_network, x)
                 print(self.exact_distance_labels)
 
-                if current_node != self.source:
-                    current_node = self.predecessors[current_node]
+                if x != self.source_node:
+                    x = self.predecessor_nodes[x]
 
-    def run_ahuja_orlin_shortest_path_algorithm(self, capacity_matrix):
-        # Execute the Ahuja-Orlin shortest path algorithm for maximum flow
-        flow_matrix = np.zeros((self.node_count, self.node_count), dtype=int)
-        residual_network = self.initialize_residual_network(flow_matrix, capacity_matrix)
-        self.display_network(residual_network)
+    def execute_ahuja_orlin_shortest_path(self, capacity_matrix):
+        flow_matrix = np.zeros((self.num_nodes, self.num_nodes), dtype=int)
+        residual_network = self.calculate_initial_residual_network(self.num_nodes, flow_matrix, capacity_matrix)
+        for i in range(self.num_nodes):
+            print(residual_network[i])
 
         self.calculate_exact_distances_BFS(capacity_matrix)
-        self.find_shortest_path_in_residual_network(residual_network, capacity_matrix)
+        self.calculate_shortest_path_on_residual_network(residual_network, capacity_matrix)
 
-        self.display_network(residual_network)
+        for i in range(self.num_nodes):
+            print(residual_network[i])
 
-        max_flow = self.calculate_max_flow(flow_matrix, capacity_matrix, residual_network)
-        self.display_flow_and_capacity(max_flow, capacity_matrix)
-
-    def display_network(self, network):
-        # Display the network matrix row by row
-        for row in network:
-            print(row)
+        max_flow_matrix = self.calculate_max_flow(flow_matrix, capacity_matrix, residual_network)
+        self.display_max_flow_and_capacity(max_flow_matrix, capacity_matrix)

@@ -24,14 +24,14 @@ c = [
 ]
 
 # import generic_dmf_algorithm 
-# alg_generic = generic_dmf_algorithm.GenericFlowAlgorithm(n, s, t)
-# alg_generic.run_algorithm(f, c)
+# alg_generic = generic_dmf_algorithm.GenericDMFAlgorithm(n, s, t)
+# alg_generic.execute_generic_dmf_algorithm(f, c)
 
 
 # import alg_forf_fulkerson 
 # alg_ff_generic = alg_forf_fulkerson.FordFulkersonAlgorithm(n, s, t)
-# alg_ff_generic.run_ford_fulkerson_algorithm(f,c)
+# alg_ff_generic.execute_ford_fulkerson_algorithm(f,c)
 
 import alg_edmos_karp
 alg_ek = alg_edmos_karp.EdmondsKarpAlgorithm(n, s, t)
-alg_ek.run_edmonds_karp_algorithm(f, c)
+alg_ek.execute_edmonds_karp_algorithm(f, c)

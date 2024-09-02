@@ -1,74 +1,68 @@
 import numpy as np
 from copy import deepcopy
-import generic_dmf_algorithm
+import generic_dmf_algorithm 
 
-class BitScalingAlgorithm(generic_dmf_algorithm.GenericFlowAlgorithm):
-    def __init__(self, node_count, source, sink, capacity_matrix):
-        # Initialize with the number of nodes, source, sink, and initial capacity matrix
-        super().__init__(node_count, source, sink)
-        self.max_capacity = []
+class BitScalingAlgorithm(generic_dmf_algorithm.GenericDMFAlgorithm):
+    def __init__(self, num_nodes, source, sink, capacity_matrix):
+        super().__init__(num_nodes, source, sink)
+        self.max_capacity_list = []
         self.capacity_matrix_stack = []
-        self.current_step = 0
+        self.current_index = 0
         self.capacity_matrix_stack.append(capacity_matrix)
 
     def calculate_max_capacity(self, capacity_matrix):
-        # Calculate the maximum capacity in the capacity matrix
-        max_capacity = np.max(capacity_matrix)
-        self.max_capacity.append(max_capacity)
+        max_capacity = 0
+        for i in range(self.num_nodes):
+            max_from_current_row = np.max(capacity_matrix[i])
+            if max_capacity < max_from_current_row:
+                max_capacity = max_from_current_row
+        self.max_capacity_list.append(max_capacity)
 
-    def initialize_capacity_matrices(self, capacity_matrix):
-        print(f"Maximum capacity: {self.max_capacity} for step k={self.current_step}")
-        old_capacity_matrix = capacity_matrix  # Assume this is a list of lists
-
-        while self.max_capacity[-1] > 1:
-            new_capacity_matrix = [
-                [old_capacity_matrix[i][j] // 2 for j in range(self.node_count)]
-                for i in range(self.node_count)
-            ]
-            self.current_step += 1
-            print(f"For k={self.current_step}, new capacity matrix:\n{new_capacity_matrix}")
+    def initialize_capacity_matrix(self, capacity_matrix):
+        print(f"Max capacity: {self.max_capacity_list[-1]} for step k={self.current_index}")
+        old_capacity_matrix = deepcopy(capacity_matrix)
+        while self.max_capacity_list[-1] > 1:
+            new_capacity_matrix = np.zeros((self.num_nodes, self.num_nodes), dtype=int)
+            for i in range(self.num_nodes):
+                for j in range(self.num_nodes):
+                    if old_capacity_matrix[i][j] > 0:
+                        new_capacity_matrix[i][j] = old_capacity_matrix[i][j] // 2
+            self.current_index += 1
+            print(f"For k={self.current_index} the new capacity matrix is {new_capacity_matrix}")
             self.capacity_matrix_stack.append(new_capacity_matrix)
 
             self.calculate_max_capacity(new_capacity_matrix)
-            print(f"Maximum capacity: {self.max_capacity[-1]} for step k={self.current_step}")
-            old_capacity_matrix = new_capacity_matrix
+            print(f"Max capacity: {self.max_capacity_list[-1]} for step k={self.current_index}")
+            old_capacity_matrix = deepcopy(new_capacity_matrix)
 
-    def run_bit_scaling_algorithm(self, initial_capacity_matrix):
-        # Calculate the initial maximum capacity and initialize the capacity matrices
-        self.calculate_max_capacity(initial_capacity_matrix)
-        self.initialize_capacity_matrices(initial_capacity_matrix)
+    def clone_array(self, array):
+        return deepcopy(array)
 
-        # Initialize the flow matrix for the first step
-        flow_matrix = np.zeros((self.node_count, self.node_count), dtype=int)
-        print("Initial flow matrix:\n", flow_matrix)
+    def execute_bit_scaling_algorithm(self, capacity_matrix):
+        self.calculate_max_capacity(capacity_matrix)
+        self.initialize_capacity_matrix(capacity_matrix)
 
-        # Process each step from the highest bit level down to the original capacity matrix
-        while self.current_step >= 0:
+        f_k_plus_1 = np.zeros((self.num_nodes, self.num_nodes), dtype=int)
+        print(f_k_plus_1)
+
+        while self.current_index >= 0:
             current_capacity_matrix = self.capacity_matrix_stack[-1]
-            residual_network = deepcopy(current_capacity_matrix)
+            new_residual_network = self.clone_array(current_capacity_matrix)
 
-            # Calculate the residual network corresponding to the maximum flow
-            residual_network = self.calculate_max_flow_residual_network(residual_network)
-            print(f"Current capacity matrix:\n{self.capacity_matrix_stack[-1]}")
-            print(f"Residual network:\n{residual_network}")
+            new_residual_network = self.calculate_residual_network_for_max_flow(new_residual_network)
+            print(f"Capacity matrix={self.capacity_matrix_stack[-1]}")
+            print(f"Residual network={new_residual_network}")
 
-            # Calculate the maximum flow and display it
-            max_flow = self.calculate_max_flow(flow_matrix, current_capacity_matrix, residual_network)
-            print(f"Flow matrix:\n{max_flow}")
-            self.display_flow_and_capacity(max_flow, current_capacity_matrix)
+            # Calculate max flow and display
+            max_flow_matrix = self.calculate_max_flow(f_k_plus_1, current_capacity_matrix, new_residual_network)
+            print(f"Flow matrix={max_flow_matrix}")
+            self.display_max_flow_and_capacity(max_flow_matrix, current_capacity_matrix)
 
             self.capacity_matrix_stack.pop()
-            self.current_step -= 1
 
-            # Prepare the flow matrix for the next iteration
+            self.current_index -= 1
             if self.capacity_matrix_stack:
-                print(f"Next capacity matrix:\n{self.capacity_matrix_stack[-1]}")
-                flow_matrix = 2 * max_flow
-
-    def display_flow_and_capacity(self, flow_matrix, capacity_matrix):
-        # Display the flow matrix and the capacity matrix
-        for i in range(self.node_count):
-            for j in range(self.node_count):
-                if capacity_matrix[i][j] > 0:
-                    print(f"({i+1},{j+1}): flow = {flow_matrix[i][j]}, capacity = {capacity_matrix[i][j]}")
-
+                print(f"Capacity matrix={self.capacity_matrix_stack[-1]}")
+                for i in range(self.num_nodes):
+                    for j in range(self.num_nodes):
+                        f_k_plus_1[i][j] = 2 * max_flow_matrix[i][j]

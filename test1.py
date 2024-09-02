@@ -50,41 +50,39 @@ t = 6
 n = 6
 
 
-# import alg_scalare_capacitate
-
+# import alg_scalare_capacitate # No good implementation
 # alg_scap = alg_scalare_capacitate.CapacityScalingAlgorithm(n,s,t,f,c)
-# alg_scap.run_capacity_scaling_algorithm(f,c)
+# alg_scap.execute_capacity_scaling_algorithm(f,c)
 
-import alg_scalare_bit
-
-alg_sbit = alg_scalare_bit.BitScalingAlgorithm(n,s,t,c1)
-alg_sbit.run_bit_scaling_algorithm(c1)
+# import alg_scalare_bit
+# alg_sbit = alg_scalare_bit.BitScalingAlgorithm(n,s,t,c1)
+# alg_sbit.execute_bit_scaling_algorithm(c1)
 
 
 # import alg_ahuja_orlin_shortest_path
 
-# alg_ah_o_short = alg_ahuja_orlin_shortest_path.AlgAhujaOrlinDrumulCelMaiScurt(n,s,t)
-# alg_ah_o_short.calculare_ahuja_orlin_drumul_cel_mai_scurt(c_AO)
+# alg_ah_o_short = alg_ahuja_orlin_shortest_path.AhujaOrlinShortestPathAlgorithm(n,s,t)
+# alg_ah_o_short.execute_ahuja_orlin_shortest_path(c_AO)
 
 
 # import alg_ahuja_orlin_retele_stratificate
 
-# alg_ah_o_ret_strat = alg_ahuja_orlin_retele_stratificate.AlgAhujaOrlinReteleStratificate(n,s,t)
-# alg_ah_o_ret_strat.calculare_ahuja_orlin_retele_stratificate(c_AO)
+# alg_ah_o_ret_strat = alg_ahuja_orlin_retele_stratificate.AhujaOrlinLayeredNetworksAlgorithm(n,s,t)
+# alg_ah_o_ret_strat.execute_ahuja_orlin_layered_networks(c_AO)
 
 
 # import alg_generic_cu_preflux
 
-# alg_gen_cu_pref = alg_generic_cu_preflux.AlgGenericCuPrefluxuri(5,1,5)
-# alg_gen_cu_pref.calculare_alg_generic_cu_prefixuri(c_genPref)
+# alg_gen_cu_pref = alg_generic_cu_preflux.GenericPreflowAlgorithm(5,1,5)
+# alg_gen_cu_pref.execute_generic_preflow_algorithm(c_genPref)
 
 
 # import alg_preflux_fifo
 
-# alg_pref_fifo = alg_preflux_fifo.AlgPrefluxFIFO(5, 1, 5)
-# alg_pref_fifo.calculare_alg_preflux_FIFO(c_PrefFIFO)
+# alg_pref_fifo = alg_preflux_fifo.PreflowFIFOAlgorithm(5, 1, 5)
+# alg_pref_fifo.execute_generic_preflow_algorithm(c_PrefFIFO)
 
 # import alg_pref_cu_eticheta_maxima
 
-# alg_pref_max_label = alg_pref_cu_eticheta_maxima.AlgPrefluxCuEtichetaMaxima(5,1,5)
-# alg_pref_max_label.calculare_alg_preflux_cu_eticheta_maxima(c_PrefEMax)
+# alg_pref_max_label = alg_pref_cu_eticheta_maxima.PreflowWithHighestLabelAlgorithm(5,1,5)
+# alg_pref_max_label.execute_highest_label_preflow_algorithm(c_PrefEMax)
